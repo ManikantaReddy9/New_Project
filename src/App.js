@@ -91,26 +91,23 @@ export default function App() {
       </header>
       <main
         className="relative h-full overflow-hidden"
-        onMouseEnter={() => setPaused(true)}   
-        onMouseLeave={() => setPaused(false)} 
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
       >
         <div
           key={currentIndex}
-          className="w-screen flex items-center justify-center animate-slideUp"
-          style={{ height: "100vh" }}
+          className="w-screen h-screen flex items-center justify-center animate-slideUp"
         >
           <div className="w-full h-full">
             {isCreditSlides ? (
-              <CreditSlides
-                paused={paused}
-                onComplete={handleCreditSlidesEnd}
-              />
+              <CreditSlides paused={paused} onComplete={handleCreditSlidesEnd} />
             ) : (
               <CurrentComponent paused={paused} />
             )}
           </div>
         </div>
       </main>
+
     </div>
   );
 }
