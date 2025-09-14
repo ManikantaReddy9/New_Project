@@ -50,18 +50,23 @@ export default function App() {
   };
 
   useEffect(() => {
-  const audio = audioRef.current;
+    const audio = audioRef.current;
 
-  if (!paused) {
-    audio.play().catch(() => {
-      console.log("Autoplay blocked");
-    });
-  } else {
-    audio.pause();
-  }
+    const enableAudio = () => {
+      audio.muted = false;
+      audio.play().catch(() => {});
+      document.removeEventListener("click", enableAudio);
+    };
 
-  // ⏸ Pause music when user leaves the tab
-  const handleVisibilityChange = () => {
+    if (!paused) {
+      audio.play().catch(() => {
+        console.log("Autoplay blocked, waiting for click...");
+        document.addEventListener("click", enableAudio);
+      });
+    } else {
+      audio.pause();
+    }
+    const handleVisibilityChange = () => {
     if (document.hidden) {
       audio.pause();
     } else if (!paused) {
@@ -71,10 +76,11 @@ export default function App() {
 
   document.addEventListener("visibilitychange", handleVisibilityChange);
 
-  return () => {
-    document.removeEventListener("visibilitychange", handleVisibilityChange);
-  };
-}, [paused]);
+    return () => {
+      document.removeEventListener("click", enableAudio);
+    };
+  }, [paused]);
+
 
   return (
     <div className="min-h-screen bg-white overflow-hidden">
